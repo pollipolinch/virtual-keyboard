@@ -1,0 +1,77 @@
+*,
+*:before,
+*:after {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #cec6c6;
+}
+
+.project {
+    width: 768px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.project-title {
+    color: rgb(9, 0, 0);
+    text-transform: uppercase;
+}
+
+.project-textarea {
+    height: 160px;
+    color: grey;
+    width: 100%;
+}
+
+.project-keyboard {
+    display: flex;
+    flex-wrap: wrap;
+    border-radius: 10px;
+    justify-content: space-between;
+    border: 4px solid #131414;
+}
+
+.project-description {
+    font-size: 25px;
+    margin-top: 60px;
+}
+
+.key {
+    min-width: 45px;
+    padding: 12px 8px;
+    margin: 2px;
+    border-radius: 3px;
+    font-weight: 500;
+    text-align: center;
+    color: #fff;
+    background-color: #160b0b;
+    transition: 0.5s;
+}
+
+.key:hover {
+    background: palevioletred;
+    cursor: pointer;
+}
+
+.key-space {
+    flex-grow: 10;
+}
+
+.key-big {
+    flex-grow: 2;
+    min-width: 72px;
+}
+
+.key-big-2 {
+    flex-grow: 4;
+    min-width: 85px;
+}
+
+.key.active {
+    background: rgb(27, 117, 173);
+    border-radius: 30px;
+    transition: 0.5s;
+
+}
