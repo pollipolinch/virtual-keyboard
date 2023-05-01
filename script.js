@@ -65,6 +65,24 @@ const keys = [
     { keyCode: 'ArrowRight', class: "ArrowRight", keyEn: "&rarr;", keyRu: "&rarr;" },
 ];
 
+let body = document.body;
+let language = 'en'
+let input
+let buttons
+
+function setLocalStorage() {
+    localStorage.setItem('lang', language);
+}
+window.addEventListener('beforeunload', setLocalStorage)
+
+function getLocalStorage() {
+    if (localStorage.getItem('lang')) {
+        language = localStorage.getItem('lang');
+    }
+}
+
+window.addEventListener('load', getLocalStorage)
+
 window.addEventListener("load", () => {
     body.innerHTML = ""
     body.innerHTML = `
@@ -76,10 +94,6 @@ window.addEventListener("load", () => {
                   Клавиатура создана в операционной системе macOS<br/>
                   Для переключения языка: левые Alt + Cmd
               </div>
-              <p>ссылка на pull request</p>
-              <a href="" target="_blank">            
-
-              </a>
           </div>    
       `;
 
@@ -87,3 +101,220 @@ window.addEventListener("load", () => {
 
 });
 
+function loadBody() {
+    let keyboard = document.querySelector(".project-keyboard");
+    keyboard.innerHTML = ""
+    if (language == 'en') {
+        keys.forEach((ell) => {
+            keyboard.innerHTML += `
+            <div class="key ${ell.class}">${ell.keyEn}</div>
+            `;
+        });
+    }
+    if (language == 'ru') {
+        keys.forEach((ell) => {
+            keyboard.innerHTML += `
+            <div class="key ${ell.class}">${ell.keyRu}</div>
+            `;
+        });
+    }
+    input = document.querySelector("#textarea");
+    buttons = document.querySelectorAll(".key");
+    clickButtons();
+}
+
+
+clickOnKeyboard();
+
+function changeLanguage() {
+    let cmdLeft = document.querySelector(".MetaLeft");
+    let altLeft = document.querySelector(".AltLeft");
+    if (cmdLeft.classList.contains('active') && altLeft.classList.contains('active')) {
+        if (language == 'en') {
+            language = 'ru';
+            loadBody();
+        }
+        else {
+            language = 'en'
+            loadBody();
+        }
+    }
+}
+
+function clickOnKeyboard() {
+    document.addEventListener('keydown', downKeyBoard);
+    document.addEventListener('keyup', upKeyBoard);
+
+    function downKeyBoard(e) {
+        let codOfKey = e.code;
+        let indexCodeKey = keys.findIndex(el => el.keyCode === codOfKey);
+        let shiftLeft = document.querySelector('.ShiftLeft')
+        let shiftRight = document.querySelector('.ShiftRight')
+        let value;
+        if (language == 'en') {
+            value = keys[indexCodeKey].keyEn;
+        } else {
+            value = keys[indexCodeKey].keyRu;
+        }
+        let output = value;
+        if (value == "Backspace") {
+            output = "";
+            input.innerHTML = input.textContent.slice(0, -1);
+        } else if (value == "CapsLock") {
+            if (language == 'en') {
+                for (let i = 0; i < keys.length; i++) {
+                    if (i > 14 && i < 25 || i > 28 && i < 38 || i > 42 && i < 50) {
+                        keys[i].keyEn = keys[i].keyEn.toUpperCase()
+                    }
+                }
+                loadBody();
+            } else {
+                for (let i = 0; i < keys.length; i++) {
+                    if (i > 14 && i < 27 || i > 28 && i < 41 || i > 42 && i < 52) {
+                        keys[i].keyRu = keys[i].keyRu.toUpperCase()
+                    }
+                }
+                loadBody();
+            }
+        } else if (shiftLeft.classList.contains('active') || shiftRight.classList.contains('active')) {
+            input.innerHTML += output.toUpperCase();
+
+        } else if (value == "Tab") {
+
+            input.innerHTML += "  ";
+
+        } else if (value == "Alt" || value == "Ctrl" || value == "cmd" || value == "Shift") {
+
+            input.innerHTML += "";
+
+        } else if (value == "Enter") {
+
+            input.innerHTML += '\n';
+
+        }
+
+        else {
+            input.innerHTML += output;
+        }
+
+        let keyInInput = document.querySelector(`.${codOfKey}`);
+        keyInInput.classList.add('active');
+
+        changeLanguage();
+    }
+
+    function upKeyBoard(e) {
+        let codOfKey = e.code;
+
+        let keyInInput = document.querySelector(`.${codOfKey}`);
+
+        if (codOfKey == "CapsLock") {
+
+            if (language == 'en') {
+
+                for (let i = 0; i < keys.length; i++) {
+
+                    if (i > 14 && i < 25 || i > 28 && i < 38 || i > 42 && i < 50) {
+
+                        keys[i].keyEn = keys[i].keyEn.toLowerCase()
+
+                    }
+
+                }
+
+                loadBody();
+
+            } else {
+
+                for (let i = 0; i < keys.length; i++) {
+
+                    if (i > 14 && i < 27 || i > 28 && i < 41 || i > 42 && i < 52) {
+
+                        keys[i].keyRu = keys[i].keyRu.toLowerCase()
+
+                    }
+
+                }
+
+                loadBody();
+
+            }
+
+        }
+
+        keyInInput.classList.remove('active');
+
+    }
+}
+
+function clickButtons() {
+    let shiftLeft = document.querySelector('.ShiftLeft')
+    let shiftRight = document.querySelector('.ShiftRight')
+    btnKey = document.querySelectorAll(".key");
+    btnKey.forEach((btn) => {
+        btn.addEventListener('mousedown', downMouse);
+        btn.addEventListener('mouseup', upMouse);
+        function downMouse(e) {
+            let target = e.target.textContent;
+            let output = target;
+            if (target == "Backspace") {
+                output = "";
+                input.innerHTML = input.textContent.slice(0, -1);
+            } else if (target == "CapsLock") {
+                if (language == 'en') {
+                    for (let i = 0; i < keys.length; i++) {
+                        if (i > 14 && i < 25 || i > 28 && i < 38 || i > 42 && i < 50) {
+                            keys[i].keyEn = keys[i].keyEn.toUpperCase()
+                        }
+                    }
+                    loadBody();
+                } else {
+                    for (let i = 0; i < keys.length; i++) {
+                        if (i > 14 && i < 27 || i > 28 && i < 41 || i > 42 && i < 52) {
+                            keys[i].keyRu = keys[i].keyRu.toUpperCase()
+                        }
+                    }
+
+                    loadBody();
+
+                }
+
+            } else if (shiftLeft.classList.contains('active') || shiftRight.classList.contains('active')) {
+
+                input.innerHTML += output.toUpperCase();
+
+            } else if (target == "Tab") {
+
+                input.innerHTML += "  ";
+
+            } else if (target == "Alt" || target == "Ctrl" || target == "cmd" || target == "Shift") {
+
+                input.innerHTML += "";
+
+            } else if (target == "Enter") {
+
+                input.innerHTML += '\n';
+
+            }
+
+            else {
+                input.innerHTML += output;
+
+            }
+
+            let targetKey = e.target;
+
+            targetKey.classList.add('active');
+
+
+        }
+
+        function upMouse(e) {
+
+            let targetKey = e.target;
+            targetKey.classList.remove('active');
+
+        }
+    });
+
+}
