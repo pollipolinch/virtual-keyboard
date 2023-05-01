@@ -176,7 +176,10 @@ function clickOnKeyboard() {
                 }
                 loadBody();
             }
-        } else if (shiftLeft.classList.contains('active') || shiftRight.classList.contains('active')) {
+        }else if((shiftLeft.classList.contains('active') || shiftRight.classList.contains('active'))&& (value == "Alt" || value == "Ctrl" || value == "cmd" || value == "Shift")){
+            input.innerHTML += "";
+        }
+         else if (shiftLeft.classList.contains('active') || shiftRight.classList.contains('active')) {
             input.innerHTML += output.toUpperCase();
 
         } else if (value == "Tab") {
@@ -279,7 +282,10 @@ function clickButtons() {
 
                 }
 
-            } else if (shiftLeft.classList.contains('active') || shiftRight.classList.contains('active')) {
+            }else if((shiftLeft.classList.contains('active') || shiftRight.classList.contains('active'))&& (value == "Alt" || value == "Ctrl" || value == "cmd" || value == "Shift")){
+                input.innerHTML += "";
+            }
+             else if (shiftLeft.classList.contains('active') || shiftRight.classList.contains('active')) {
 
                 input.innerHTML += output.toUpperCase();
 
